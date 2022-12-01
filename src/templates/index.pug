@@ -1,0 +1,20 @@
+//- Utility
+include utils/_variables
+
+-
+    pageTitle = 'main'
+    main = true
+
+doctype html
+html
+    include layout/_head
+
+    body
+        include layout/_header
+
+        main#main
+            section#section some sheet
+                img(src='../data/catalog-1.png', alt='')
+            #todo
+
+        include layout/_footer

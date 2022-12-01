@@ -1,0 +1,17 @@
+$body-color: $brandPrimary;
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $body-color;
+  font-family: $fontFamilyBase;
+
+  footer {
+    background: url('../../images/catalog-1.png') center center no-repeat;
+  }
+
+  h1 {
+    font-family: $fontFamilySecondary;
+  }
+}
