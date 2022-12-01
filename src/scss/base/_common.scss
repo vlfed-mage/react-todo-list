@@ -1,17 +1,27 @@
 $body-color: $brandPrimary;
 
+html {
+	min-height: 100%;
+	display: flex;
+}
+
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: $body-color;
-  font-family: $fontFamilyBase;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: $grayBase;
+	font-family: $fontFamilyBase;
+	width: 100%;
 
-  footer {
-    background: url('../../images/catalog-1.png') center center no-repeat;
-  }
+	main {
+		flex: 1;
+	}
 
-  h1 {
-    font-family: $fontFamilySecondary;
-  }
+	footer {
+		// something to do
+	}
+
+	h1 {
+		font-family: $fontFamilySecondary;
+	}
 }
