@@ -1,9 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class App extends Component {
-	render() {
-		return pug`
-			.react__app test react
-		`
-	}
+import AppHeader from '../app-header';
+import SearchPanel from '../search-panel';
+import TodoList from '../todo-list';
+
+const App = () => {
+
+	const todoData = [
+		{ label: 'something to do', important: false, id: 1 },
+		{ label: 'something else to do', important: true, id: 2 },
+		{ label: 'other to do', important: false, id: 3 },
+	];
+
+	return (
+		<div className="react__app">
+			<AppHeader />
+			<SearchPanel />
+			<TodoList todos={ todoData } />
+		</div>
+	)
 }
+
+export default App;

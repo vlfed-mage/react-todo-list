@@ -7,5 +7,5 @@ import App from "./components/app";
 
 ReactDOM.render(
 	<App />,
-	document.getElementById('todo')
+	document.getElementById('root')
 );
