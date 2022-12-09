@@ -1,5 +1,3 @@
-$body-color: $brandPrimary;
-
 html {
 	min-height: 100%;
 	display: flex;
@@ -8,20 +6,23 @@ html {
 body {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	color: $grayBase;
 	font-family: $fontFamilyBase;
 	width: 100%;
+}
 
-	main {
-		flex: 1;
-	}
+header {
+	text-align: center;
+}
 
-	footer {
-		// something to do
-	}
+main {
+	flex: 1;
+}
 
-	h1 {
-		font-family: $fontFamilySecondary;
-	}
+footer {
+	text-align: center;
+}
+
+h1 {
+	font-family: $fontFamilySecondary;
 }
