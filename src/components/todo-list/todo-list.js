@@ -3,11 +3,22 @@ import React from 'react';
 import TodoListItem from '../todo-list-item';
 
 const TodoList = ({ todos }) => {
-	const todoList = todos.map(({ id, ...items }) => {
-		return <li key={ id }><TodoListItem { ...items }/></li>;
+
+	const elements = todos.map((item) => {
+		const { id, ...itemProps } = item;
+
+		return (
+			<li key={ id } className="list-group-item">
+				<TodoListItem { ...itemProps } />
+			</li>
+		);
 	});
 
-	return <ul>{ todoList }</ul>;
-}
+	return (
+		<ul className="list-group todo-list">
+			{ elements }
+		</ul>
+	);
+};
 
 export default TodoList;
