@@ -16,6 +16,15 @@
 	line-height: 35px;
 	cursor: pointer;
 	user-select: none;
+
+	&.done {
+		text-decoration: line-through;
+	}
+
+	&.important {
+		color: steelblue;
+		font-weight: 600;
+	}
 }
 
 .todo-list-item.done .todo-list-item-label {
