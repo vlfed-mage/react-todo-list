@@ -8,17 +8,17 @@ const TodoList = ({
 }) => {
 
 	const elements = todos.map((item) => {
-		const { id, ...itemProps } = item;
+		const { id, visibility, ...items } = item;
 
-		return (
-			<li key={ id } className="list-group-item">
+		return visibility ? (
+			<li key={id} className='list-group-item'>
 				<TodoListItem
-					{ ...itemProps }
-					onToggleDone={ () => actions.onToggleDone(id) }
-					onToggleImportant={ () => actions.onToggleImportant(id) }
-					onItemDelete={ () => actions.onItemDelete(id) } />
+					{...items}
+					onToggleDone={() => actions.onToggleDone(id)}
+					onToggleImportant={() => actions.onToggleImportant(id)}
+					onItemDelete={() => actions.onItemDelete(id)}/>
 			</li>
-		);
+		) : null;
 	});
 
 	return (

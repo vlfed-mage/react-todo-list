@@ -1,10 +1,12 @@
 import React from 'react';
 
-const SearchPanel = () => {
+const SearchPanel = ({ label, onSearchTyping }) => {
 	return (
-		<input type="text"
+		<input type="search"
 			   className="form-control search-input"
-			   placeholder="type to search" />
+			   placeholder="type to search"
+			   onChange={ (e) => onSearchTyping(e) }
+		       value={ label } />
 	);
 };
 
