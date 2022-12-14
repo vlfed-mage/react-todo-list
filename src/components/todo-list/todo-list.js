@@ -16,7 +16,7 @@ const TodoList = ({
 					{...items}
 					onToggleDone={() => actions.onToggleDone(id)}
 					onToggleImportant={() => actions.onToggleImportant(id)}
-					onItemDelete={() => actions.onItemDelete(id)}/>
+					onItemDeleted={() => actions.onItemDeleted(id)}/>
 			</li>
 		) : null;
 	});

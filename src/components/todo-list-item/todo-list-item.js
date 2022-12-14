@@ -21,7 +21,7 @@ const TodoListItem = ({
 			<button
 				type="button"
 				className="btn btn-outline-danger btn-sm"
-				onClick={ actions.onItemDelete } >
+				onClick={ actions.onItemDeleted } >
 				<i className="fa fa-trash-can" aria-hidden="true" ></i>
 			</button>
 			<button

@@ -6,6 +6,7 @@ import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
 import TodoList from '../todo-list';
 import ItemStatusFilter from '../item-status-filter';
+import AddItemFrom from '../add-item-form';
 
 export default class App extends Component {
 
@@ -56,14 +57,6 @@ export default class App extends Component {
 		});
 	}
 
-	removeItem = (id) => {
-		this.setState(({ todoData }) => {
-			return {
-				todoData: todoData.filter((el) => el.id !== id)
-			};
-		});
-	}
-
 	onSearchTyping = (e) => {
 		this.setState(({ todoData }) => {
 			const text = e.target.value;
@@ -74,6 +67,25 @@ export default class App extends Component {
 						? { ...el, visibility: true }
 						: { ...el, visibility: false }
 				})
+			};
+		});
+	}
+
+	removeItem = (id) => {
+		this.setState(({ todoData }) => {
+			return {
+				todoData: todoData.filter((el) => el.id !== id)
+			};
+		});
+	}
+
+	addItem = (text) => {
+		this.setState(({ todoData }) => {
+			return {
+				todoData: [
+					...todoData,
+					createItem(text)
+				]
 			};
 		});
 	}
@@ -99,7 +111,9 @@ export default class App extends Component {
 					todos={ todoData }
 					onToggleDone={ this.onToggleDone }
 					onToggleImportant={ this.onToggleImportant }
-					onItemDelete={ this.removeItem } />
+					onItemDeleted={ this.removeItem } />
+				<AddItemFrom
+					onItemAdded={ this.addItem } />
 			</div>
 		);
 	}
