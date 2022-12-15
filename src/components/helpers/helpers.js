@@ -5,6 +5,7 @@ function generateId() {
 function createNewItem(text) {
 	return {
 		label: text,
+		important: false,
 		id: generateId()
 	}
 }
@@ -17,4 +18,12 @@ function createFilterButton(text) {
 	}
 }
 
-export { createNewItem, createFilterButton };
+const onToggleItemProp = (arr, id, prop) => {
+	return arr.map((item) => {
+		return id === item.id
+			? { ...item, [prop]: !item[prop] }
+			: item
+	})
+}
+
+export { createNewItem, createFilterButton, onToggleItemProp };

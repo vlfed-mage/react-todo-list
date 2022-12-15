@@ -2,16 +2,18 @@ import React from 'react';
 
 import TodoListItem from '../todo-list-item';
 
-const TodoList = ({ todos, onItemRemoved }) => {
+const TodoList = ({ todos, ...actions }) => {
 
-	const todoItems = todos.map(({ label, id }) => {
+	const todoItems = todos.map(({ id, ...otherProps }) => {
 		return (
 			<li
 				key={ id }
 				className="list-group-item" >
 				<TodoListItem
-					label={ label }
-					onItemRemoved={ () => onItemRemoved(id) } />
+					{ ...otherProps }
+					onItemRemoved={ () => actions.onItemRemoved(id) }
+					onToggleImportant={ () => actions.onToggleImportant(id) }
+					onToggleDone={ () => actions.onToggleDone(id) } />
 			</li>
 		);
 	});

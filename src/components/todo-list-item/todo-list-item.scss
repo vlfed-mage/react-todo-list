@@ -2,11 +2,26 @@
 	align-items: center;
 
 	span {
+		cursor: pointer;
 		margin: 0 auto 0 0;
+		user-select: none;
 	}
 
 	button {
 		min-width: 40px;
 		margin: 0 0 0 8px;
+	}
+
+	&.important {
+		span {
+			color: tomato;
+			font-weight: 700;
+		}
+	}
+
+	&.done {
+		span {
+			text-decoration: line-through;
+		}
 	}
 }
