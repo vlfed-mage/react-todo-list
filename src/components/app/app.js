@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { createNewItem } from '../helpers/helpers';
+import { createNewItem, onToggleItemProp } from '../helpers/helpers';
 
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
@@ -39,6 +39,22 @@ export default class App extends Component {
 		})
 	}
 
+	onToggleImportant = (id) => {
+		this.setState(({ todoData }) => {
+			return {
+				todoData: onToggleItemProp(todoData, id, 'important')
+			}
+		})
+	}
+
+	onToggleDone = (id) => {
+		this.setState(({ todoData }) => {
+			return {
+				todoData: onToggleItemProp(todoData, id, 'done')
+			}
+		})
+	}
+
 	render() {
 		const { filter, todoData } = this.state;
 
@@ -51,7 +67,9 @@ export default class App extends Component {
 				</div>
 				<TodoList
 					todos={ todoData }
-					onItemRemoved={ this.removeItem } />
+					onItemRemoved={ this.removeItem }
+					onToggleImportant={ this.onToggleImportant }
+					onToggleDone={ this.onToggleDone } />
 				<AddNewItem
 					onItemAdded={ this.addItem }/>
 			</div>
