@@ -1,0 +1,12 @@
+.add-new-item {
+	margin: 8px 0 0;
+
+	input {
+		margin: 0 8px 0 0;
+	}
+
+	button {
+		min-width: 100px;
+		flex-shrink: 0;
+	}
+}
