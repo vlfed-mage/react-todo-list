@@ -18,6 +18,27 @@ export default class App extends Component {
 		filter: 'all'
 	}
 
+	removeItem = (id) => {
+		this.setState(({ todoData }) => {
+			return {
+				todoData: todoData.filter((item) => {
+					return id !== item.id
+				})
+			}
+		})
+	}
+
+	addItem = (text) => {
+		this.setState(({ todoData }) => {
+			return {
+				todoData: [
+					...todoData,
+					createNewItem(text)
+				]
+			}
+		})
+	}
+
 	render() {
 		const { filter, todoData } = this.state;
 
@@ -28,8 +49,11 @@ export default class App extends Component {
 					<SearchPanel />
 					<StatusItemFilter filter={ filter } />
 				</div>
-				<TodoList todos={ todoData }/>
-				<AddNewItem />
+				<TodoList
+					todos={ todoData }
+					onItemRemoved={ this.removeItem } />
+				<AddNewItem
+					onItemAdded={ this.addItem }/>
 			</div>
 		);
 	};

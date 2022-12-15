@@ -1,0 +1,7 @@
+.status-item-filter {
+	button {
+		&:nth-last-child(n+2) {
+			margin: 0 4px 0 0;
+		}
+	}
+}
