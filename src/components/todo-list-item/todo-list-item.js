@@ -1,6 +1,14 @@
 import React from 'react';
 
-const TodoListItem = ({ label, important, done, ...actions }) => {
+const TodoListItem = ({
+	label,
+	important,
+	done,
+	isSelectAvailable,
+	selected,
+	...actions
+}) => {
+
 	let classNames = "todo-list-item d-flex";
 	const buttonClass = important ? 'btn-success' : 'btn-outline-success';
 	if(important) classNames += ' important';
@@ -8,6 +16,13 @@ const TodoListItem = ({ label, important, done, ...actions }) => {
 
 	return (
 		<div className={ classNames }>
+			{ isSelectAvailable
+				? <input
+				type="checkbox"
+				checked={ selected }
+				onChange={ () => actions.onToggleItemSelected() } />
+				: null
+			}
 			<span
 				onClick={ () => actions.onToggleDone() } >
 				{ label }
