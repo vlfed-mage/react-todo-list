@@ -2,7 +2,7 @@ import React from 'react';
 
 import { createFilterButton } from '../helpers/helpers';
 
-const StatusItemFilter = ({ filter }) => {
+const StatusItemFilter = ({ filter, onFilterChange }) => {
 
 	const buttons = [
 		createFilterButton('all'),
@@ -16,7 +16,8 @@ const StatusItemFilter = ({ filter }) => {
 		return (
 			<button
 				key={ id }
-				className={ `btn ${ classState }` }>
+				className={ `btn ${ classState }` }
+				onClick={ () => onFilterChange(name) } >
 				{ label }
 			</button>
 		);

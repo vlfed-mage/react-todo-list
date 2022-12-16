@@ -15,7 +15,8 @@ export default class App extends Component {
 			createNewItem('do something else'),
 			createNewItem('do something better'),
 		],
-		filter: 'all'
+		filter: 'all',
+		search: ''
 	}
 
 	removeItem = (id) => {
@@ -51,22 +52,55 @@ export default class App extends Component {
 		this.setState(({ todoData }) => {
 			return {
 				todoData: onToggleItemProp(todoData, id, 'done')
-			}
+			};
 		})
 	}
 
+	onFilterItems(data, filter) {
+		switch (filter) {
+			case 'active':
+				return data.filter(({ done }) => !done);
+			case 'done':
+				return data.filter(({ done }) => done);
+			default:
+				return data;
+		}
+	}
+
+	onFilterChange = (filter) => {
+		this.setState({ filter })
+	}
+
+	onSearchItems(data, search) {
+		return data.filter(({ label }) => label.indexOf(search) > -1);
+	}
+
+	onSearchChange = (search) => {
+		this.setState({ search });
+	}
+
 	render() {
-		const { filter, todoData } = this.state;
+		const { filter, search, todoData } = this.state;
+
+		const toDo = todoData.filter(el => !el.done).length,
+			  done = todoData.length - toDo;
+
+		const itemRenderer = this.onSearchItems(this.onFilterItems(todoData, filter), search);
 
 		return (
 			<div className="todo-app">
-				<AppHeader />
+				<AppHeader
+					toDo={ toDo }
+					done={ done } />
 				<div className="action-bar d-flex">
-					<SearchPanel />
-					<StatusItemFilter filter={ filter } />
+					<SearchPanel
+						onSearchChange={ this.onSearchChange } />
+					<StatusItemFilter
+						filter={ filter }
+						onFilterChange={ this.onFilterChange } />
 				</div>
 				<TodoList
-					todos={ todoData }
+					todos={ itemRenderer }
 					onItemRemoved={ this.removeItem }
 					onToggleImportant={ this.onToggleImportant }
 					onToggleDone={ this.onToggleDone } />

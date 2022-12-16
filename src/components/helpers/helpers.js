@@ -6,6 +6,7 @@ function createNewItem(text) {
 	return {
 		label: text,
 		important: false,
+		done: false,
 		id: generateId()
 	}
 }
