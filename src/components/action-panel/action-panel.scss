@@ -1,0 +1,14 @@
+.action-panel {
+	align-items: center;
+	justify-content: flex-end;
+	margin: 16px 0 0;
+
+	button {
+		min-width: 40px;
+		flex-shrink: 0;
+
+		&:nth-last-child(n+2) {
+			margin: 0 8px 0 0;
+		}
+	}
+}
