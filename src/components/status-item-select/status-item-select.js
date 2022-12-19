@@ -8,7 +8,7 @@ const StatusItemSelect = ({ isSelectAvailable, onToggleSelectButton, todosLength
 			type="button"
 			className="select-button btn btn-outline-secondary"
 			onClick={ () => onToggleSelectButton() }
-			disabled={ todosLength <= 1 } >
+			disabled={ todosLength <= 1 && !isSelectAvailable } >
 			{ buttonText }
 		</button>
 	)

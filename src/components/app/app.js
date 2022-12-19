@@ -8,6 +8,7 @@ import StatusItemFilter from '../status-item-filter';
 import TodoList from '../todo-list';
 import AddNewItem from '../add-new-item';
 import StatusItemSelect from '../status-item-select';
+import ActionPanel from '../action-panel';
 
 export default class App extends Component {
 	state = {
@@ -99,7 +100,16 @@ export default class App extends Component {
 	}
 
 	onSearchChange = (search) => {
-		this.setState({ search });
+		this.setState(({ todoData, isSelectAvailable }) => {
+			return isSelectAvailable ? {
+				isSelectAvailable: !isSelectAvailable,
+				search: search,
+				todoData: resetProp(todoData, 'selected'),
+				selectAll: false
+			} : {
+				search: search
+			}
+		});
 	}
 
 	onToggleSelectButton = () => {
@@ -115,33 +125,54 @@ export default class App extends Component {
 	}
 
 	onToggleAllSelectedItems = () => {
-		this.setState(({ selectAll, todoData, filter }) => {
+		this.setState(({ selectAll, todoData, filter, search }) => {
 			return selectAll ? {
 				selectAll: !selectAll,
 				todoData: todoData.map(item => ({
 					...item,
-					...resetProp(this.onFilterItems(todoData, filter), 'selected')
+					...resetProp(this.onSearchItems(this.onFilterItems(todoData, filter), search), 'selected')
 						.find(filteredItem => filteredItem.id === item.id)
 				}))
 			} : {
 				selectAll: !selectAll,
 				todoData: todoData.map(item => ({
 					...item,
-					...resetProp(this.onFilterItems(todoData, filter), 'selected', true)
+					...resetProp(this.onSearchItems(this.onFilterItems(todoData, filter), search), 'selected', true)
 						.find(filteredItem => filteredItem.id === item.id)
 				}))
 			}
 		})
 	}
 
+	onActionGroup = (prop) => {
+		this.setState(({ todoData }) => {
+			return {
+				todoData: todoData.map((el) => {
+					return el.selected
+						? { ...el, [prop]: !el[prop] }
+						: el
+				})
+			}
+		});
+	}
+
+	onRemoveGroup = () => {
+		this.setState(({ todoData }) => {
+			return {
+				todoData: todoData.filter((el) => !el.selected)
+			}
+		});
+	}
+
 	render() {
 		const { filter, search, isSelectAvailable, selectAll, todoData } = this.state;
 
 		const toDo = todoData.filter(el => !el.done).length,
-			  done = todoData.length - toDo;
+			  done = todoData.length - toDo,
+			  selectedItemsLength = todoData.filter(el => el.selected).length;
 
 		const itemRenderer = this.onSearchItems(this.onFilterItems(todoData, filter), search),
-			itemRendererLength = itemRenderer.length;
+			  itemRendererLength = itemRenderer.length;
 
 		return (
 			<div className="todo-app">
@@ -170,6 +201,11 @@ export default class App extends Component {
 					onToggleAllSelectedItems={ this.onToggleAllSelectedItems } />
 				<AddNewItem
 					onItemAdded={ this.addItem }/>
+				<ActionPanel
+					isSelectAvailable={ isSelectAvailable }
+					selectedItemsLength={ selectedItemsLength }
+					onActionGroup={ this.onActionGroup }
+					onRemoveGroup={ this.onRemoveGroup } />
 			</div>
 		);
 	};
