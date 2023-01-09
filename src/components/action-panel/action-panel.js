@@ -22,8 +22,6 @@ const ActionPanel = ({ isSelectAvailable, selectedItemsLength, onActionGroup, on
 		)
 	});
 
-	console.log(selectedItemsLength);
-
 	return (
 		isSelectAvailable && selectedItemsLength >= 2
 			? <div className="action-panel d-flex">

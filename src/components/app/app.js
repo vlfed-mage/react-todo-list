@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import { createNewItem, onToggleItemProp, resetProp } from '../helpers/helpers';
 
@@ -10,68 +10,47 @@ import AddNewItem from '../add-new-item';
 import StatusItemSelect from '../status-item-select';
 import ActionPanel from '../action-panel';
 
-export default class App extends Component {
-	state = {
-		todoData: [
-			createNewItem('do something'),
-			createNewItem('do something else'),
-			createNewItem('do something better'),
-		],
-		filter: 'all',
-		search: '',
-		isSelectAvailable: false,
-		selectAll: false
-	}
+const App = () => {
+
+	const [todoData, setTodoData] = useState([
+		createNewItem('drink coffee'),
+		createNewItem('learn react'),
+		createNewItem('create awesome app'),
+	]),
+		  [filter, setFilter] = useState('all'),
+		  [search, setSearch] = useState(''),
+		  [isSelectAvailable, setIsSelectAvailable] = useState(false),
+		  [selectAll, setSelectAll] = useState(false),
 
 	removeItem = (id) => {
-		this.setState(({ todoData }) => {
-			return {
-				todoData: todoData.filter((item) => {
-					return id !== item.id
-				})
-			}
-		})
-	}
+		setTodoData((todoData) => todoData.filter((item) => id !== item.id));
+	},
 
 	addItem = (text) => {
-		this.setState(({ todoData }) => {
-			return {
-				todoData: [
-					...todoData,
-					createNewItem(text)
-				]
-			}
+		setTodoData((todoData) => {
+			return [
+				...todoData,
+				createNewItem(text)
+			];
 		})
-	}
+	},
 
 	onToggleImportant = (id) => {
-		this.setState(({ todoData }) => {
-			return {
-				todoData: onToggleItemProp(todoData, id, 'important')
-			}
-		})
-	}
+		setTodoData((todoData) => onToggleItemProp(todoData, id, 'important'))
+	},
 
 	onToggleDone = (id) => {
-		this.setState(({ todoData }) => {
-			return {
-				todoData: onToggleItemProp(todoData, id, 'done')
-			};
-		})
-	}
+		setTodoData((todoData) => onToggleItemProp(todoData, id, 'done'))
+	},
 
 	onToggleItemSelected = (id) => {
-		this.setState(({ todoData, selectAll }) => {
-			return selectAll ? {
-				todoData: onToggleItemProp(todoData, id, 'selected'),
-				selectAll: !selectAll
-			} : {
-				todoData: onToggleItemProp(todoData, id, 'selected'),
-			}
-		})
-	}
+		setTodoData((todoData) => onToggleItemProp(todoData, id, 'selected'))
+		if (selectAll) {
+			setSelectAll((selectAll) => !selectAll)
+		}
+	},
 
-	onFilterItems(data, filter) {
+	onFilterItems = (data, filter) => {
 		switch (filter) {
 			case 'active':
 				return data.filter(({ done }) => !done);
@@ -80,133 +59,107 @@ export default class App extends Component {
 			default:
 				return data;
 		}
-	}
+	},
 
 	onFilterChange = (filter) => {
-		this.setState(({ todoData, isSelectAvailable }) => {
-			return isSelectAvailable ? {
-				isSelectAvailable: !isSelectAvailable,
-				filter: filter,
-				todoData: resetProp(todoData, 'selected'),
-				selectAll: false
-			} : {
-				filter: filter
-			}
-		});
-	}
+		setFilter(filter);
+		if (isSelectAvailable) {
+			setIsSelectAvailable((isSelectAvailable) => !isSelectAvailable);
+			setSelectAll(false);
+			setTodoData((todoData) => resetProp(todoData, 'selected'));
+		}
+	},
 
-	onSearchItems(data, search) {
+	onSearchItems = (data, search) => {
 		return data.filter(({ label }) => label.indexOf(search) > -1);
-	}
+	},
 
 	onSearchChange = (search) => {
-		this.setState(({ todoData, isSelectAvailable }) => {
-			return isSelectAvailable ? {
-				isSelectAvailable: !isSelectAvailable,
-				search: search,
-				todoData: resetProp(todoData, 'selected'),
-				selectAll: false
-			} : {
-				search: search
-			}
-		});
-	}
+		setSearch(search);
+		if (isSelectAvailable) {
+			setIsSelectAvailable((isSelectAvailable) => !isSelectAvailable);
+			setSelectAll(false);
+			setTodoData((todoData) => resetProp(todoData, 'selected'));
+		}
+	},
 
 	onToggleSelectButton = () => {
-		this.setState(({ isSelectAvailable, todoData }) => {
-			return isSelectAvailable ? {
-				isSelectAvailable: !isSelectAvailable,
-				selectAll: false,
-				todoData: resetProp(todoData, 'selected')
-			} : {
-				isSelectAvailable: !isSelectAvailable
-			}
-		})
-	}
+		if (isSelectAvailable) {
+			setSelectAll(false);
+			setTodoData((todoData) => resetProp(todoData, 'selected'))
+		}
+		setIsSelectAvailable((isSelectAvailable) => !isSelectAvailable);
+	},
 
 	onToggleAllSelectedItems = () => {
-		this.setState(({ selectAll, todoData, filter, search }) => {
-			return selectAll ? {
-				selectAll: !selectAll,
-				todoData: todoData.map(item => ({
+		setSelectAll((selectAll) => !selectAll);
+		setTodoData((todoData) => {
+			return selectAll
+				? todoData.map(item => ({
 					...item,
-					...resetProp(this.onSearchItems(this.onFilterItems(todoData, filter), search), 'selected')
+					...resetProp(onSearchItems(onFilterItems(todoData, filter), search), 'selected')
+						.find(filteredItem => filteredItem.id === item.id)
+				})) : todoData.map(item => ({
+					...item,
+					...resetProp(onSearchItems(onFilterItems(todoData, filter), search), 'selected', true)
 						.find(filteredItem => filteredItem.id === item.id)
 				}))
-			} : {
-				selectAll: !selectAll,
-				todoData: todoData.map(item => ({
-					...item,
-					...resetProp(this.onSearchItems(this.onFilterItems(todoData, filter), search), 'selected', true)
-						.find(filteredItem => filteredItem.id === item.id)
-				}))
-			}
 		})
-	}
+	},
 
 	onActionGroup = (prop) => {
-		this.setState(({ todoData }) => {
-			return {
-				todoData: todoData.map((el) => {
-					return el.selected
-						? { ...el, [prop]: !el[prop] }
-						: el
-				})
-			}
-		});
-	}
+		setTodoData((todoData) => todoData.map((el) => {
+			return el.selected
+				? { ...el, [prop]: !el[prop] }
+				: el
+		}))
+	},
 
 	onRemoveGroup = () => {
-		this.setState(({ todoData }) => {
-			return {
-				todoData: todoData.filter((el) => !el.selected)
-			}
-		});
-	}
+		setTodoData((todoData) => todoData.filter((el) => !el.selected));
+	},
 
-	render() {
-		const { filter, search, isSelectAvailable, selectAll, todoData } = this.state;
+	toDo = todoData.filter(el => !el.done).length,
+	done = todoData.length - toDo,
+	selectedItemsLength = todoData.filter(el => el.selected).length,
 
-		const toDo = todoData.filter(el => !el.done).length,
-			  done = todoData.length - toDo,
-			  selectedItemsLength = todoData.filter(el => el.selected).length;
+	itemRenderer = onSearchItems(onFilterItems(todoData, filter), search),
+	itemRendererLength = itemRenderer.length;
 
-		const itemRenderer = this.onSearchItems(this.onFilterItems(todoData, filter), search),
-			  itemRendererLength = itemRenderer.length;
-
-		return (
-			<div className="todo-app">
-				<StatusItemSelect
-					todosLength={ itemRendererLength }
-					isSelectAvailable={ isSelectAvailable }
-					onToggleSelectButton={ this.onToggleSelectButton } />
-				<AppHeader
-					toDo={ toDo }
-					done={ done } />
-				<div className="action-bar d-flex">
-					<SearchPanel
-						onSearchChange={ this.onSearchChange } />
-					<StatusItemFilter
-						filter={ filter }
-						onFilterChange={ this.onFilterChange } />
-				</div>
-				<TodoList
-					todos={ itemRenderer }
-					isSelectAvailable={ isSelectAvailable }
-					selectAll={ selectAll }
-					onItemRemoved={ this.removeItem }
-					onToggleImportant={ this.onToggleImportant }
-					onToggleDone={ this.onToggleDone }
-					onToggleItemSelected={ this.onToggleItemSelected }
-					onToggleAllSelectedItems={ this.onToggleAllSelectedItems } />
-				<AddNewItem
-					onItemAdded={ this.addItem }/>
-				<ActionPanel
-					isSelectAvailable={ isSelectAvailable }
-					selectedItemsLength={ selectedItemsLength }
-					onActionGroup={ this.onActionGroup }
-					onRemoveGroup={ this.onRemoveGroup } />
+	return (
+		<div className="todo-app">
+			<StatusItemSelect
+				todosLength={ itemRendererLength }
+				isSelectAvailable={ isSelectAvailable }
+				onToggleSelectButton={ onToggleSelectButton } />
+			<AppHeader
+				toDo={ toDo }
+				done={ done } />
+			<div className="action-bar d-flex">
+				<SearchPanel
+					onSearchChange={ onSearchChange } />
+				<StatusItemFilter
+					filter={ filter }
+					onFilterChange={ onFilterChange } />
 			</div>
-		);
-	};
+			<TodoList
+				todos={ itemRenderer }
+				isSelectAvailable={ isSelectAvailable }
+				selectAll={ selectAll }
+				onItemRemoved={ removeItem }
+				onToggleImportant={ onToggleImportant }
+				onToggleDone={ onToggleDone }
+				onToggleItemSelected={ onToggleItemSelected }
+				onToggleAllSelectedItems={ onToggleAllSelectedItems } />
+			<AddNewItem
+				onItemAdded={ addItem }/>
+			<ActionPanel
+				isSelectAvailable={ isSelectAvailable }
+				selectedItemsLength={ selectedItemsLength }
+				onActionGroup={ onActionGroup }
+				onRemoveGroup={ onRemoveGroup } />
+		</div>
+	);
 };
+
+export default App;
