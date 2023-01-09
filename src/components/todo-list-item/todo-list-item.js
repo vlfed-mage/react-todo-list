@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+
 import TodoContext from "../todo-context";
 
 const TodoListItem = ({
@@ -9,9 +10,6 @@ const TodoListItem = ({
 	id
 }) => {
 
-	let classNames = "todo-list-item d-flex";
-	const buttonClass = important ? 'btn-success' : 'btn-outline-success';
-
 	const {
 		isSelectAvailable,
 		removeItem,
@@ -19,6 +17,9 @@ const TodoListItem = ({
 		onToggleDone,
 		onToggleItemSelected
 	} = useContext(TodoContext);
+
+	const buttonClass = important ? 'btn-success' : 'btn-outline-success';
+	let classNames = "todo-list-item d-flex";
 
 	if(important) classNames += ' important';
 	if(done) classNames += ' done';
