@@ -10,6 +10,8 @@ import AddNewItem from '../add-new-item';
 import StatusItemSelect from '../status-item-select';
 import ActionPanel from '../action-panel';
 
+import TodoContext from "../todo-context";
+
 const App = () => {
 
 	const [todoData, setTodoData] = useState([
@@ -91,19 +93,19 @@ const App = () => {
 		setIsSelectAvailable((isSelectAvailable) => !isSelectAvailable);
 	},
 
-	onToggleAllSelectedItems = () => {
+	itemRenderer = onSearchItems(onFilterItems(todoData, filter), search),
+
+	onToggleAllItemsSelected = () => {
 		setSelectAll((selectAll) => !selectAll);
 		setTodoData((todoData) => {
-			return selectAll
-				? todoData.map(item => ({
+			return todoData.map(item => selectAll ? ({
 					...item,
-					...resetProp(onSearchItems(onFilterItems(todoData, filter), search), 'selected')
-						.find(filteredItem => filteredItem.id === item.id)
-				})) : todoData.map(item => ({
+					...resetProp(itemRenderer, 'selected').find(filteredItem => filteredItem.id === item.id)
+				}) : ({
 					...item,
-					...resetProp(onSearchItems(onFilterItems(todoData, filter), search), 'selected', true)
-						.find(filteredItem => filteredItem.id === item.id)
-				}))
+					...resetProp(itemRenderer, 'selected', true).find(filteredItem => filteredItem.id === item.id)
+				})
+			)
 		})
 	},
 
@@ -123,41 +125,42 @@ const App = () => {
 	done = todoData.length - toDo,
 	selectedItemsLength = todoData.filter(el => el.selected).length,
 
-	itemRenderer = onSearchItems(onFilterItems(todoData, filter), search),
-	itemRendererLength = itemRenderer.length;
+	itemRendererLength = itemRenderer.length,
+
+	todoContextItems = {
+		onToggleAllItemsSelected,
+		onToggleItemSelected,
+		onToggleSelectButton,
+		selectedItemsLength,
+		itemRendererLength,
+		onToggleImportant,
+		isSelectAvailable,
+		onSearchChange,
+		onFilterChange,
+		onActionGroup,
+		onRemoveGroup,
+		onToggleDone,
+		itemRenderer,
+		removeItem,
+		addItem,
+		filter,
+		toDo,
+		done
+	};
 
 	return (
 		<div className="todo-app">
-			<StatusItemSelect
-				todosLength={ itemRendererLength }
-				isSelectAvailable={ isSelectAvailable }
-				onToggleSelectButton={ onToggleSelectButton } />
-			<AppHeader
-				toDo={ toDo }
-				done={ done } />
-			<div className="action-bar d-flex">
-				<SearchPanel
-					onSearchChange={ onSearchChange } />
-				<StatusItemFilter
-					filter={ filter }
-					onFilterChange={ onFilterChange } />
-			</div>
-			<TodoList
-				todos={ itemRenderer }
-				isSelectAvailable={ isSelectAvailable }
-				selectAll={ selectAll }
-				onItemRemoved={ removeItem }
-				onToggleImportant={ onToggleImportant }
-				onToggleDone={ onToggleDone }
-				onToggleItemSelected={ onToggleItemSelected }
-				onToggleAllSelectedItems={ onToggleAllSelectedItems } />
-			<AddNewItem
-				onItemAdded={ addItem }/>
-			<ActionPanel
-				isSelectAvailable={ isSelectAvailable }
-				selectedItemsLength={ selectedItemsLength }
-				onActionGroup={ onActionGroup }
-				onRemoveGroup={ onRemoveGroup } />
+			<TodoContext.Provider value={ todoContextItems }>
+				<StatusItemSelect />
+				<AppHeader />
+				<div className="action-bar d-flex">
+					<SearchPanel />
+					<StatusItemFilter />
+				</div>
+				<TodoList />
+				<AddNewItem />
+				<ActionPanel />
+			</TodoContext.Provider>
 		</div>
 	);
 };

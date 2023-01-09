@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
-const AddNewItem = ({ onItemAdded }) => {
+import TodoContext from "../todo-context";
+
+const AddNewItem = () => {
 	const [label, setLabel] = useState('');
+	const { addItem } = useContext(TodoContext);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		if(label.length) onItemAdded(label);
+		if(label.length) addItem(label);
 
 		setLabel('')
 	};

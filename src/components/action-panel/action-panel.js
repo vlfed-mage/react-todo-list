@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-const ActionPanel = ({ isSelectAvailable, selectedItemsLength, onActionGroup, onRemoveGroup }) => {
+import TodoContext from "../todo-context";
+
+const ActionPanel = () => {
 
 	const actionButtons = [
 		{className: 'btn btn-outline-danger', icon: 'fa-trash-can', name: 'remove'},
@@ -8,7 +10,16 @@ const ActionPanel = ({ isSelectAvailable, selectedItemsLength, onActionGroup, on
 		{className: 'btn btn-outline-success', icon: 'fa-exclamation', name: 'important'}
 	];
 
-	const buttons = actionButtons.map(({ title, className, icon, name }) => {
+	const {
+		isSelectAvailable,
+		selectedItemsLength,
+		onActionGroup,
+		onRemoveGroup
+	} = useContext(TodoContext);
+
+	const buttons = actionButtons.map((
+		{ className, icon, name }
+	) => {
 		return (
 			<button
 				className={ className }

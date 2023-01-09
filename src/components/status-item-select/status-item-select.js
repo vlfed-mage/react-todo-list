@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import TodoContext from '../todo-context'
 
-const StatusItemSelect = ({ isSelectAvailable, onToggleSelectButton, todosLength }) => {
+const StatusItemSelect = () => {
+	const {
+		itemRendererLength,
+		isSelectAvailable,
+		onToggleSelectButton
+	} = useContext(TodoContext);
 	const buttonText = isSelectAvailable ? 'Cancel' : 'Select';
 
 	return (
@@ -8,7 +14,7 @@ const StatusItemSelect = ({ isSelectAvailable, onToggleSelectButton, todosLength
 			type="button"
 			className="select-button btn btn-outline-secondary"
 			onClick={ () => onToggleSelectButton() }
-			disabled={ todosLength <= 1 && !isSelectAvailable } >
+			disabled={ itemRendererLength <= 1 && !isSelectAvailable } >
 			{ buttonText }
 		</button>
 	)

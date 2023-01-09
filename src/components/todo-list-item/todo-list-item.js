@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import TodoContext from "../todo-context";
 
 const TodoListItem = ({
 	label,
 	important,
 	done,
-	isSelectAvailable,
 	selected,
-	...actions
+	id
 }) => {
 
 	let classNames = "todo-list-item d-flex";
 	const buttonClass = important ? 'btn-success' : 'btn-outline-success';
+
+	const {
+		isSelectAvailable,
+		removeItem,
+		onToggleImportant,
+		onToggleDone,
+		onToggleItemSelected
+	} = useContext(TodoContext);
+
 	if(important) classNames += ' important';
 	if(done) classNames += ' done';
 
@@ -20,21 +29,21 @@ const TodoListItem = ({
 				? <input
 				type="checkbox"
 				checked={ selected }
-				onChange={ () => actions.onToggleItemSelected() } />
+				onChange={ () => onToggleItemSelected(id) } />
 				: null
 			}
 			<span
-				onClick={ () => actions.onToggleDone() } >
+				onClick={ () => onToggleDone(id) } >
 				{ label }
 			</span>
 			<button
 				className="btn btn-outline-danger btn-md"
-				onClick={ () => actions.onItemRemoved() }>
+				onClick={ () => removeItem(id) }>
 				<i className="fa fa-trash-can"></i>
 			</button>
 			<button
 				className={ `btn ${ buttonClass } btn-md` }
-				onClick={ () => actions.onToggleImportant() } >
+				onClick={ () => onToggleImportant(id) } >
 				<i className="fa fa-exclamation"></i>
 			</button>
 		</div>

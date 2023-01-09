@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { createFilterButton } from '../helpers/helpers';
+import TodoContext from "../todo-context";
 
-const StatusItemFilter = ({ filter, onFilterChange }) => {
+const StatusItemFilter = () => {
+	const { filter, onFilterChange } = useContext(TodoContext);
 
 	const buttons = [
 		createFilterButton('all'),

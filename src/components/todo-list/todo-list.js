@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import TodoListItem from '../todo-list-item';
+import TodoContext from "../todo-context";
 
-const TodoList = ({ todos, isSelectAvailable, selectAll, ...actions }) => {
+const TodoList = ({ ...actions }) => {
+	const {
+		onToggleAllItemsSelected,
+		itemRenderer: todos,
+		isSelectAvailable,
+		selectAll
+	} = useContext(TodoContext);
 
-	const todoItems = todos.map(({ id, ...otherProps }) => {
+	const todoItems = todos.map(({ ...props }) => {
 		return (
 			<li
-				key={ id }
+				key={ props.id }
 				className="list-group-item" >
 				<TodoListItem
-					{ ...otherProps }
-					isSelectAvailable={ isSelectAvailable }
-					onItemRemoved={ () => actions.onItemRemoved(id) }
-					onToggleImportant={ () => actions.onToggleImportant(id) }
-					onToggleDone={ () => actions.onToggleDone(id) }
-					onToggleItemSelected={ () => actions.onToggleItemSelected(id) } />
+					id={ props.id }
+					{ ...props } />
 			</li>
 		);
 	});
@@ -29,7 +32,7 @@ const TodoList = ({ todos, isSelectAvailable, selectAll, ...actions }) => {
 						id="select-all"
 						name="select-all"
 						checked={ selectAll }
-						onChange={ () => actions.onToggleAllSelectedItems() } />
+						onChange={ () => onToggleAllItemsSelected() } />
 					<label
 						htmlFor="select-all" >
 						Select all
