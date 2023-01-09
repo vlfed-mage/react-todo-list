@@ -1,51 +1,36 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-export default class AddNewItem extends Component {
-	state = {
-		label: ''
-	}
+const AddNewItem = ({ onItemAdded }) => {
+	const [label, setLabel] = useState('');
 
-	onSubmit = (e) => {
-		const { onItemAdded } = this.props,
-			  { label } = this.state;
-
+	const onSubmit = (e) => {
 		e.preventDefault();
 		if(label.length) onItemAdded(label);
 
-		this.setState(({ label }) => {
-			return {
-				label: ''
-			}
-		})
-	}
+		setLabel('')
+	};
 
-	onChange = (e) => {
-		this.setState(({ label }) => {
-			return {
-				label: e.target.value
-			}
-		})
-	}
+	const onChange = (e) => {
+		setLabel(e.target.value)
+	};
 
-	render() {
-		const { label } = this.state;
-
-		return (
-			<form
-				className="add-new-item d-flex"
-				onSubmit={ this.onSubmit } >
-				<input
-					type="text"
-					className="form-control"
-					placeholder="What do you want to do"
-					onChange={ this.onChange }
-					value={ label } />
-				<button
-					type="submit"
-					className="btn btn-outline-secondary">
-					Add Item
-				</button>
-			</form>
-		);
-	}
+	return (
+		<form
+			className="add-new-item d-flex"
+			onSubmit={ onSubmit } >
+			<input
+				type="text"
+				className="form-control"
+				placeholder="What do you want to do"
+				onChange={ onChange }
+				value={ label } />
+			<button
+				type="submit"
+				className="btn btn-outline-secondary">
+				Add Item
+			</button>
+		</form>
+	);
 };
+
+export default AddNewItem;
