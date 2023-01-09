@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+
 import TodoContext from '../todo-context'
 
 const StatusItemSelect = () => {
@@ -7,6 +8,7 @@ const StatusItemSelect = () => {
 		isSelectAvailable,
 		onToggleSelectButton
 	} = useContext(TodoContext);
+
 	const buttonText = isSelectAvailable ? 'Cancel' : 'Select';
 
 	return (

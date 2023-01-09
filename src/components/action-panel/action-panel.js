@@ -17,21 +17,21 @@ const ActionPanel = () => {
 		onRemoveGroup
 	} = useContext(TodoContext);
 
-	const buttons = actionButtons.map((
-		{ className, icon, name }
-	) => {
-		return (
-			<button
-				className={ className }
-				key={ name }
-				title={ `${ name } selected items` }
-				onClick={ name === 'remove'
-					? () => onRemoveGroup()
-					: () => onActionGroup(name) } >
-				<i className={ `fa ${ icon }` }></i>
-			</button>
-		)
-	});
+	const buttons = actionButtons.map(
+		({ className, icon, name }) => {
+			return (
+				<button
+					className={ className }
+					key={ name }
+					title={ `${ name } selected items` }
+					onClick={ name === 'remove'
+						? () => onRemoveGroup()
+						: () => onActionGroup(name) } >
+					<i className={ `fa ${ icon }` }></i>
+				</button>
+			)
+		}
+	);
 
 	return (
 		isSelectAvailable && selectedItemsLength >= 2

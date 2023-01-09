@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import TodoListItem from '../todo-list-item';
 import TodoContext from "../todo-context";
 
-const TodoList = ({ ...actions }) => {
+const TodoList = () => {
 	const {
 		onToggleAllItemsSelected,
 		itemRenderer: todos,
