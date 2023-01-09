@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import TodoContext from "../todo-context";
 
-const SearchPanel = ({ onSearchChange }) => {
+const SearchPanel = () => {
+	const { onSearchChange } = useContext(TodoContext);
 	const [ term, setTerm ] = useState('');
 
 	const onTermChange = (e) => {
